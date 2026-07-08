@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smoke & Fire | Craft BBQ</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Google Fonts (Oswald for bold, funky headers, Inter for readable text) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif'],
+                    },
+                    colors: {
+                        bbq: {
+                            black: '#1a1a1a',
+                            red: '#E53935',    /* Vibrant, spicy red */
+                            yellow: '#FFCA28', /* Mustard yellow */
+                            cream: '#F4F1EA',  /* Warm off-white background */
+                            dark: '#0f0f0f'
+                        }
+                    },
+                    boxShadow: {
+                        'brutal': '6px 6px 0px 0px rgba(26,26,26,1)',
+                        'brutal-hover': '2px 2px 0px 0px rgba(26,26,26,1)',
+                        'brutal-white': '6px 6px 0px 0px rgba(255,255,255,1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles to add that "funky/bold" aesthetic */
+        body {
+            background-color: #F4F1EA;
+            color: #1a1a1a;
+        }
+        
+        .heading-shadow {
+            text-shadow: 4px 4px 0px #E53935;
+        }
+
+        .heading-shadow-dark {
+            text-shadow: 4px 4px 0px #1a1a1a;
+        }
+
+        /* Subtle noise texture for a gritty/smoky feel */
+        .bg-noise {
+            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"/%3E%3C/svg%3E');
+        }
+
+        /* Smooth interactive effects */
+        .btn-brutal {
+            transition: all 0.15s ease-in-out;
+        }
+        .btn-brutal:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0px 0px rgba(26,26,26,1) !important;
+        }
+        
+        /* Mobile menu toggle logic */
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        #mobile-menu.open {
+            max-height: 400px;
+        }
+
+        /* Image hover zoom effect */
+        .img-zoom-container {
+            overflow: hidden;
+        }
+        .img-zoom-container img {
+            transition: transform 0.5s ease;
+        }
+        .group:hover .img-zoom-container img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-noise antialiased flex flex-col min-h-screen">
+
+    <header class="bg-white border-b-4 border-bbq-black sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="font-heading font-bold text-3xl tracking-tighter text-bbq-black uppercase">
+                        <i class="fa-solid fa-fire text-bbq-red mr-2"></i>Smoke & Fire
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-8 items-center">
+                    <a href="#menu" class="font-heading text-xl font-bold text-gray-800 hover:text-bbq-red transition-colors uppercase tracking-wide">Menus</a>
+                    <a href="#specials" class="font-heading text-xl font-bold text-gray-800 hover:text-bbq-red transition-colors uppercase tracking-wide">Specials</a>
+                    <a href="#catering" class="font-heading text-xl font-bold text-gray-800 hover:text-bbq-red transition-colors uppercase tracking-wide">Catering</a>
+                    <a href="#location" class="font-heading text-xl font-bold text-gray-800 hover:text-bbq-red transition-colors uppercase tracking-wide">Location</a>
+                </nav>
+
+                <!-- Order Online Button (Prominent) -->
+                <div class="hidden md:flex items-center">
+                    <a href="#order" class="bg-bbq-yellow text-bbq-black font-heading font-bold text-xl px-6 py-2 border-4 border-bbq-black shadow-brutal btn-brutal uppercase tracking-wider">
+                        Order Online
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-bbq-black hover:text-bbq-red focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-3xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="md:hidden bg-bbq-black border-t-4 border-bbq-yellow">
+            <div class="px-4 pt-4 pb-6 space-y-2">
+                <a href="#menu" class="block px-3 py-3 text-lg font-heading font-bold text-white uppercase border-b border-gray-700">Menus</a>
+                <a href="#specials" class="block px-3 py-3 text-lg font-heading font-bold text-white uppercase border-b border-gray-700">Specials</a>
+                <a href="#catering" class="block px-3 py-3 text-lg font-heading font-bold text-white uppercase border-b border-gray-700">Catering</a>
+                <a href="#location" class="block px-3 py-3 text-lg font-heading font-bold text-white uppercase border-b border-gray-700">Location</a>
+                <a href="#order" class="block mt-6 w-full text-center bg-bbq-red text-white border-4 border-white shadow-brutal-white btn-brutal font-heading font-bold text-xl px-4 py-3 uppercase">
+                    Order Online
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative bg-bbq-black h-[70vh] min-h-[600px] flex items-center justify-center overflow-hidden border-b-8 border-bbq-yellow">
+        <!-- Background Image with Overlay - High Quality Ribs/Brisket -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1594041680534-e8c8cdebd659?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Smoked Ribs and Brisket" class="w-full h-full object-cover opacity-60 scale-105 animate-[pulse_20s_ease-in-out_infinite]" />
+            <div class="absolute inset-0 bg-gradient-to-t from-bbq-dark via-transparent to-transparent opacity-90"></div>
+            <!-- Vignette -->
+            <div class="absolute inset-0 bg-black opacity-20"></div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-12">
+            <span class="bg-bbq-yellow text-bbq-black font-heading font-bold px-4 py-1 text-lg uppercase tracking-widest border-2 border-bbq-black mb-6 inline-block transform -rotate-2 shadow-brutal">DC's Best Blend</span>
+            <h1 class="font-heading font-bold text-6xl md:text-8xl lg:text-9xl text-white uppercase tracking-tighter mb-6 leading-none heading-shadow">
+                Craft American<br />Barbeque
+            </h1>
+            <p class="text-white text-xl md:text-2xl font-medium mb-10 max-w-2xl mx-auto drop-shadow-lg font-sans">
+                Made in-house, always. Traditions from all over the world, all on one plate.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="#menu" class="bg-white text-bbq-black border-4 border-bbq-black font-heading font-bold text-2xl px-10 py-4 shadow-brutal btn-brutal uppercase">
+                    Peep The Menu
+                </a>
+                <a href="#order" class="bg-bbq-red text-white border-4 border-bbq-black font-heading font-bold text-2xl px-10 py-4 shadow-brutal btn-brutal uppercase">
+                    Order Delivery
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <main class="flex-grow">
+        
+        <!-- Rotating Specials Bar -->
+        <div id="specials" class="bg-bbq-black text-white py-4 overflow-hidden border-b-4 border-bbq-red relative z-20">
+            <div class="whitespace-nowrap animate-[marquee_25s_linear_infinite] inline-block font-heading font-bold text-2xl uppercase tracking-widest">
+                <span class="mx-8"><i class="fa-solid fa-fire-flame-curved text-bbq-yellow mr-2"></i> Try Our Limited Time Monthly Chef's Special</span>
+                <span class="mx-8"><i class="fa-solid fa-beer-mug-empty text-bbq-yellow mr-2"></i> Happy Hour Mon-Fri 2-6PM</span>
+                <span class="mx-8"><i class="fa-solid fa-hotdog text-bbq-yellow mr-2"></i> Now Serving All-Beef Hot Dogs!</span>
+                <!-- Duplicate for seamless looping -->
+                <span class="mx-8"><i class="fa-solid fa-fire-flame-curved text-bbq-yellow mr-2"></i> Try Our Limited Time Monthly Chef's Special</span>
+                <span class="mx-8"><i class="fa-solid fa-beer-mug-empty text-bbq-yellow mr-2"></i> Happy Hour Mon-Fri 2-6PM</span>
+            </div>
+        </div>
+
+        <style>
+            @keyframes marquee {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+            }
+        </style>
+
+        <!-- Featured Menu Gallery Section -->
+        <section class="py-20 bg-bbq-cream border-b-4 border-bbq-black">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-10">
+                    <div>
+                        <h2 class="font-heading font-bold text-5xl uppercase tracking-tighter heading-shadow-dark text-white">House Favorites</h2>
+                        <p class="text-xl text-gray-700 mt-2 font-medium">Smoked low and slow, just how it should be.</p>
+                    </div>
+                    <a href="#menu" class="hidden md:inline-block font-heading font-bold text-xl uppercase border-b-4 border-bbq-red hover:text-bbq-red transition-colors pb-1">See Full Menu <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Food Item 1 -->
+                    <div class="group border-4 border-bbq-black bg-white shadow-brutal p-4 relative">
+                        <div class="img-zoom-container border-2 border-bbq-black mb-4 h-64 w-full">
+                            <img src="https://images.unsplash.com/photo-1514361892635-6b07e31e75f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Brisket Sandwich" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-heading font-bold text-2xl uppercase leading-tight">The Pitmaster<br>Brisket Sando</h3>
+                            <span class="font-heading font-bold text-xl text-bbq-red">$16</span>
+                        </div>
+                        <p class="text-gray-600 font-sans">14-hour smoked prime brisket, house slaw, pickles, and signature sweet sauce on a toasted brioche bun.</p>
+                    </div>
+
+                    <!-- Food Item 2 -->
+                    <div class="group border-4 border-bbq-black bg-white shadow-brutal p-4 relative">
+                        <div class="img-zoom-container border-2 border-bbq-black mb-4 h-64 w-full">
+                            <img src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Smoked Ribs" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-heading font-bold text-2xl uppercase leading-tight">Half Rack<br>Pork Ribs</h3>
+                            <span class="font-heading font-bold text-xl text-bbq-red">$22</span>
+                        </div>
+                        <p class="text-gray-600 font-sans">Dry-rubbed and cherry wood smoked until fall-off-the-bone tender. Served with your choice of two sides.</p>
+                    </div>
+
+                    <!-- Food Item 3 -->
+                    <div class="group border-4 border-bbq-black bg-white shadow-brutal p-4 relative">
+                        <div class="absolute top-0 right-0 z-10 bg-bbq-yellow text-bbq-black font-heading font-bold px-3 py-1 uppercase text-sm border-b-4 border-l-4 border-bbq-black">New!</div>
+                        <div class="img-zoom-container border-2 border-bbq-black mb-4 h-64 w-full">
+                            <img src="https://images.unsplash.com/photo-1628191137573-dee64e727614?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Gourmet Hotdog" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-heading font-bold text-2xl uppercase leading-tight">Texas Fire<br>Hot Dog</h3>
+                            <span class="font-heading font-bold text-xl text-bbq-red">$12</span>
+                        </div>
+                        <p class="text-gray-600 font-sans">Quarter-pound all-beef frank loaded with chopped brisket, jalapeños, queso, and crispy onions.</p>
+                    </div>
+                </div>
+                
+                <a href="#menu" class="md:hidden mt-8 block text-center font-heading font-bold text-xl uppercase border-4 border-bbq-black bg-white shadow-brutal py-3">See Full Menu</a>
+            </div>
+        </section>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            
+            <!-- Bento-style Grid Layout - Now with Background Images -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                
+                <!-- Card 1: Event Catering (Image Background) -->
+                <div class="group relative bg-bbq-black border-4 border-bbq-black min-h-[450px] flex flex-col justify-end shadow-brutal overflow-hidden">
+                    <!-- Background Image -->
+                    <div class="absolute inset-0 img-zoom-container">
+                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Catering Spread" class="w-full h-full object-cover opacity-60" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="relative z-10 p-8 md:p-10">
+                        <div class="inline-block bg-bbq-yellow text-bbq-black font-heading font-bold px-3 py-1 mb-4 uppercase text-sm border-2 border-bbq-black">Book Us</div>
+                        <h2 class="font-heading font-bold text-4xl md:text-5xl uppercase mb-4 tracking-tight text-white heading-shadow">Event Catering</h2>
+                        <p class="text-gray-200 mb-8 text-lg font-sans max-w-md">
+                            Got a celebration coming up? Enjoy our catering truck (or team) at your next event. Let's make this one for the history books.
+                        </p>
+                        <a href="#catering" class="inline-flex items-center justify-center bg-white text-bbq-black border-4 border-bbq-black font-heading font-bold text-xl uppercase px-8 py-3 shadow-brutal btn-brutal">
+                            Explore Catering 
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2: Lunch Combos (Image Background) -->
+                <div class="group relative bg-bbq-red border-4 border-bbq-black min-h-[450px] flex flex-col justify-end shadow-brutal overflow-hidden">
+                    <!-- Background Image -->
+                    <div class="absolute inset-0 img-zoom-container">
+                        <img src="https://images.unsplash.com/photo-1594221708779-94832f4320d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Burger and Fries Combo" class="w-full h-full object-cover opacity-60 mix-blend-multiply" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="relative z-10 p-8 md:p-10">
+                        <div class="inline-block bg-white text-bbq-red font-heading font-bold px-3 py-1 mb-4 uppercase text-sm border-2 border-bbq-black">Mon-Fri 11:30AM - 2PM</div>
+                        <h2 class="font-heading font-bold text-4xl md:text-5xl uppercase mb-4 tracking-tight text-white heading-shadow">Lunch Combos</h2>
+                        <p class="text-gray-200 mb-8 text-lg font-sans max-w-md">
+                            Fast, fresh, and perfectly smoked. Each combo includes crispy fries and a house-made 20oz lemonade or sweet tea.
+                        </p>
+                        <a href="#menu" class="inline-flex items-center justify-center bg-bbq-yellow text-bbq-black border-4 border-bbq-black font-heading font-bold text-xl uppercase px-8 py-3 shadow-brutal btn-brutal">
+                            See The Combos
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Location & Details Section -->
+        <section id="location" class="bg-white border-y-8 border-bbq-black py-20 relative">
+            <!-- Decorative background pattern -->
+            <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#000 2px, transparent 2px); background-size: 30px 30px;"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="font-heading font-bold text-6xl uppercase tracking-tighter mb-4 heading-shadow-dark text-white">Find The Smoke</h2>
+                    <div class="w-32 h-2 bg-bbq-red mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+                    <!-- Address -->
+                    <div class="flex flex-col items-center md:items-start p-6 border-4 border-white hover:border-bbq-yellow transition-colors">
+                        <div class="w-16 h-16 bg-bbq-red rounded-full flex items-center justify-center mb-6 border-4 border-bbq-black shadow-brutal">
+                            <i class="fa-solid fa-location-dot text-2xl text-white"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-3xl uppercase mb-3">The Joint</h3>
+                        <p class="text-xl text-gray-800 font-medium">1654 Columbia Rd NW<br>Washington, DC 20009</p>
+                        <a href="#" class="mt-6 text-bbq-black font-heading font-bold text-lg uppercase border-b-4 border-bbq-yellow hover:text-bbq-red hover:border-bbq-red transition-all">Get Directions</a>
+                    </div>
+
+                    <!-- Hours -->
+                    <div class="flex flex-col items-center md:items-start p-6 border-4 border-white hover:border-bbq-yellow transition-colors">
+                        <div class="w-16 h-16 bg-bbq-yellow rounded-full flex items-center justify-center mb-6 border-4 border-bbq-black shadow-brutal">
+                            <i class="fa-solid fa-clock text-2xl text-bbq-black"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-3xl uppercase mb-3">Hours</h3>
+                        <ul class="text-lg text-gray-800 space-y-2 text-center md:text-left font-medium">
+                            <li class="flex justify-between w-full md:w-48 border-b border-gray-200 pb-2"><span>Sun - Thu:</span> <span>11:30A - 9:00P</span></li>
+                            <li class="flex justify-between w-full md:w-48 border-b border-gray-200 pb-2"><span>Fri - Sat:</span> <span>11:30A - 10:00P</span></li>
+                            <li class="text-sm text-bbq-red font-bold uppercase mt-4">*Or until we sell out!</li>
+                        </ul>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="flex flex-col items-center md:items-start p-6 border-4 border-white hover:border-bbq-yellow transition-colors">
+                        <div class="w-16 h-16 bg-bbq-black rounded-full flex items-center justify-center mb-6 border-4 border-bbq-yellow shadow-brutal">
+                            <i class="fa-solid fa-phone text-2xl text-white"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-3xl uppercase mb-3">Holler At Us</h3>
+                        <p class="text-xl text-gray-800 font-medium mb-2 hover:text-bbq-red cursor-pointer">(202) 555-0198</p>
+                        <p class="text-xl text-gray-800 font-medium hover:text-bbq-red cursor-pointer border-b-2 border-transparent hover:border-bbq-red">info@smokeandfire.com</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-bbq-black text-white pt-20 pb-8 border-t-8 border-bbq-red">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 text-center md:text-left">
+                
+                <!-- Brand -->
+                <div class="col-span-1 md:col-span-2">
+                    <a href="#" class="font-heading font-bold text-5xl tracking-tighter text-white uppercase inline-block mb-6 hover:text-bbq-yellow transition-colors">
+                        <i class="fa-solid fa-fire text-bbq-red mr-2"></i>Smoke & Fire
+                    </a>
+                    <p class="text-gray-400 max-w-sm mx-auto md:mx-0 text-lg font-sans">
+                        Two-time Michelin Bib Gourmand winner serving up the best blend of classic BBQ traditions and elevated flavors.
+                    </p>
+                    <div class="flex space-x-4 mt-8 justify-center md:justify-start">
+                        <a href="#" class="w-12 h-12 bg-white text-bbq-black border-2 border-bbq-black flex items-center justify-center hover:bg-bbq-yellow hover:translate-y-[-4px] transition-all shadow-brutal-white">
+                            <i class="fa-brands fa-instagram text-2xl"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 bg-white text-bbq-black border-2 border-bbq-black flex items-center justify-center hover:bg-bbq-yellow hover:translate-y-[-4px] transition-all shadow-brutal-white">
+                            <i class="fa-brands fa-facebook-f text-2xl"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 bg-white text-bbq-black border-2 border-bbq-black flex items-center justify-center hover:bg-bbq-yellow hover:translate-y-[-4px] transition-all shadow-brutal-white">
+                            <i class="fa-brands fa-twitter text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="font-heading font-bold text-2xl uppercase mb-6 text-bbq-yellow tracking-wide">Quick Links</h4>
+                    <ul class="space-y-4 font-heading text-lg tracking-wide uppercase">
+                        <li><a href="#" class="text-white hover:text-bbq-red transition-colors inline-block transform hover:translate-x-2 duration-200">About Us</a></li>
+                        <li><a href="#" class="text-white hover:text-bbq-red transition-colors inline-block transform hover:translate-x-2 duration-200">Awards</a></li>
+                        <li><a href="#" class="text-white hover:text-bbq-red transition-colors inline-block transform hover:translate-x-2 duration-200">Careers</a></li>
+                        <li><a href="#" class="text-white hover:text-bbq-red transition-colors inline-block transform hover:translate-x-2 duration-200">Gift Cards</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="font-heading font-bold text-2xl uppercase mb-6 text-bbq-yellow tracking-wide">Join The Club</h4>
+                    <p class="text-gray-400 mb-6 font-sans">Sign up for special drops and secret menu items.</p>
+                    <form class="flex flex-col space-y-3" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="Email Address" class="px-4 py-3 bg-bbq-dark text-white border-2 border-gray-700 focus:outline-none focus:border-bbq-yellow font-sans text-lg" required>
+                        <button type="submit" class="bg-white text-bbq-black border-2 border-white font-heading font-bold uppercase text-xl px-4 py-3 shadow-brutal-white btn-brutal hover:bg-bbq-yellow hover:border-bbq-yellow">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 font-sans">
+                <p>&copy; 2026 Smoke & Fire BBQ. All rights reserved.</p>
+                <div class="space-x-6 mt-4 md:mt-0 uppercase font-heading tracking-wide">
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for mobile menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const icon = btn.querySelector('i');
+
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('open');
+                
+                // Toggle icon between bars and times (X)
+                if (menu.classList.contains('open')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-xmark');
+                } else {
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
